@@ -1,20 +1,68 @@
 ﻿// SEC_HW_IndividualProject.cpp : 此文件包含 "main" 函数。程序执行将在此处开始并结束。
 //
-
+#include <istream>
+#include <fstream>
 #include <iostream>
+#include <string>
+#include <stdlib.h>
+#include <algorithm>
+#include <iterator>
+#include "Figure.h"
+#include "Circle.h"
+#include "Line.h"
+#include "Point.h"
+#include "PlaneContainer.h"
+using namespace std;
 
-int main()
-{
-    std::cout << "Hello World!\n";
+int main(int argc, char* argv[]) {
+	string inputPath = "";
+	string outputPath = "";
+	ifstream in;
+	ofstream out;
+	string strBuf;
+	char charBuf[100];
+	int n;
+	//arguments process
+	for (int i = 1; i < argc; i++) {
+		if (string(argv[i]) == "-i") {
+			inputPath = string(argv[++i]);
+		} else if (string(argv[i]) == "-o") {
+			outputPath = string(argv[++i]);
+		}
+	}
+	if (inputPath.size() == 0) {
+		cout << "-i is in need" << endl;
+		return -1;
+	}
+	if (outputPath.size() == 0) {
+		cout << "-o is in need" << endl;
+		return -1;
+	}
+	//input and output process
+	in.open(inputPath);
+	out.open(outputPath);
+
+	in >> n;
+	PlaneContainer pc;
+
+	for (int i = 0; i < n; i++) {
+		int x1, x2, y1, y2, r;
+
+		in >> strBuf;
+		if (strBuf == "L") {
+			in >> x1 >> y1 >> x2 >> y2;
+			pc.insert(new Line(x1, y1, x2, y2));
+		} else if (strBuf == "C") {
+			in >> x1 >> y1 >> r;
+			pc.insert(new Circle(x1, y1, r));
+		}
+	}
+
+	out << pc.countIntersectionPoints() << endl;
+	cout << "total intersection points :" << pc.countIntersectionPoints() << " as following:" << endl;
+	for (auto p = pc.getIntersectPoints()->begin(); p != pc.getIntersectPoints()->end(); p++) {
+		cout << (p->getX()) << "," << (p->getY()) << endl;
+	}
+	return 0;
+
 }
-
-// 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单
-// 调试程序: F5 或调试 >“开始调试”菜单
-
-// 入门使用技巧: 
-//   1. 使用解决方案资源管理器窗口添加/管理文件
-//   2. 使用团队资源管理器窗口连接到源代码管理
-//   3. 使用输出窗口查看生成输出和其他消息
-//   4. 使用错误列表窗口查看错误
-//   5. 转到“项目”>“添加新项”以创建新的代码文件，或转到“项目”>“添加现有项”以将现有代码文件添加到项目
-//   6. 将来，若要再次打开此项目，请转到“文件”>“打开”>“项目”并选择 .sln 文件
