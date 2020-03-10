@@ -20,7 +20,6 @@ int main(int argc, char* argv[]) {
 	ifstream in;
 	ofstream out;
 	string strBuf;
-	char charBuf[100];
 	int n;
 	//arguments process
 	for (int i = 1; i < argc; i++) {
